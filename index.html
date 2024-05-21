@@ -6,6 +6,7 @@
     <title>Property Management Needs Assessment</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="firebase-init.js" type="module"></script>
 </head>
 <body>
     <div class="container">
@@ -13,5 +14,42 @@
         <div id="questionContainer"></div> <!-- Container for questions and answers -->
     </div>
     <script src="script.js"></script>
+    <script src="data-collector-script.js" type="module"></script>
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-analytics.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD4lZ0zgOtBHN3m_mGPK77K5zkwgmXrST4",
+            authDomain: "property-owners-quiz.firebaseapp.com",
+            projectId: "property-owners-quiz",
+            storageBucket: "property-owners-quiz.appspot.com",
+            messagingSenderId: "943647532840",
+            appId: "1:943647532840:web:c561e4ba735b44d482121d",
+            measurementId: "G-4XYB71GGWG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Function to add data to Firestore
+        async function submitQuizData(email, answers) {
+            try {
+                const docRef = await addDoc(collection(db, "quizzes"), {
+                    email: email,
+                    answers: answers,
+                    timestamp: new Date()
+                });
+                console.log("Document written with ID: ", docRef.id);
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
+        }
+    </script>
 </body>
 </html>
