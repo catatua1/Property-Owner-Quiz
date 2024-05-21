@@ -140,3 +140,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     displayQuestion(); // Initially display the first question
 });
+document.querySelector('#quizForm').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const email = document.querySelector('#emailInput').value; // Ensure you have an input field with id 'emailInput' for collecting emails
+    const answers = collectAnswersFromForm(); // This function needs to be defined to collect answers from your form
+
+    try {
+        await submitQuizData(email, answers); // Ensure 'submitQuizData' is properly defined or imported if it's in another script
+        console.log("Data submitted");
+    } catch (error) {
+        console.error("Failed to submit data:", error);
+    }
+});
