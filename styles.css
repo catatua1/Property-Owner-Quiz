@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif; /* Using Roboto font */
+    background: #d3dbd9;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0);
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+h1 {
+    margin-bottom: 20px; /* Space below the header */
+}
+
+.question {
+    font-size: 18px; /* Appropriate size for readability */
+    margin-bottom: 20px; /* Space between the question and the first answer */
+    color: #333; /* Darker text for contrast */
+}
+
+.answer {
+    background: #ff9a52; /* Light gray for better visibility */
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(196, 28, 28, 0.03);
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block; /* Each answer as a block for better spacing */
+    width: 90%; /* Slightly less width for padding */
+    margin-left: auto;
+    margin-right: auto; /* Center alignment */
+}
+
+.answer:hover {
+    background: #FFDABF; /* Slightly darker on hover for feedback */
+}
+
+label {
+    font-weight: normal;
+    color: #555;
+}
+
+input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #eeeeee;
+    background-color: #ffffff;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
