@@ -1,3 +1,4 @@
+import { submitQuizData } from './data-collector-script.js';
 document.addEventListener('DOMContentLoaded', function() {
     const questions = [
         {
@@ -55,12 +56,31 @@ document.addEventListener('DOMContentLoaded', function() {
             multiple: false
         }
     ];
+
     let currentQuestionIndex = 0;
     const questionContainer = document.getElementById('questionContainer');
 
+    function collectAnswersFromForm() {
+        const answers = {};
+        questions.forEach(question => {
+            const inputs = document.querySelectorAll(`input[name="${question.name}"]`);
+            if (question.multiple) {
+                answers[question.name] = Array.from(inputs)
+                                              .filter(input => input.checked)
+                                              .map(input => input.value);
+            } else {
+                const checkedInput = Array.from(inputs).find(input => input.checked);
+                answers[question.name] = checkedInput ? checkedInput.value : null;
+            }
+        });
+        return answers;
+    }    
+
     function displayQuestion() {
+        console.log('Displaying question:', currentQuestionIndex);
         questionContainer.innerHTML = ''; // Clear previous contents
         const questionData = questions[currentQuestionIndex];
+        console.log('Current question data:', questionData);
         const questionElem = document.createElement('div');
         questionElem.classList.add('question');
         questionElem.textContent = questionData.question;
@@ -112,9 +132,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function showResults() {
         questionContainer.innerHTML = '<h2>Thank you for completing the assessment!</h2><p>Enter your email to receive more information:</p>';
         const emailForm = document.createElement('form');
+        emailForm.id = 'emailForm';
         const emailInput = document.createElement('input');
         emailInput.type = 'email';
         emailInput.placeholder = 'Your email address';
+        emailInput.id = 'emailInput';
         emailForm.appendChild(emailInput);
     
         const submitButton = document.createElement('button');
@@ -122,24 +144,20 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.textContent = 'Submit';
         emailForm.appendChild(submitButton);
     
-        emailForm.onsubmit = function(e) {
+        emailForm.onsubmit = async function(e) {
             e.preventDefault();
-            collectEmail(emailInput.value);
+            const email = emailInput.value;
+            const answers = collectAnswersFromForm(); // Collect all answers
+            await submitQuizData(email, answers); // Submit data to Firebase
+            questionContainer.innerHTML = '<h2>Thank you for your interest!</h2>';
         };
     
         questionContainer.appendChild(emailForm);
     }
-    
-    function collectEmail(email) {
-        console.log("Email collected:", email);
-        // Additional code to handle the email (e.g., send it to a server)
-        questionContainer.innerHTML = '<h2>Thank you for your interest!</h2>';
-    }
-    
-   
 
     displayQuestion(); // Initially display the first question
 });
+
 document.querySelector('#quizForm').addEventListener('submit', async function(event) {
     event.preventDefault(); // Prevent the default form submission
 
